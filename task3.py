@@ -1,5 +1,3 @@
-import os
-
 def extract_data_from_file(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
@@ -30,11 +28,8 @@ def filter_sweden_february_data(data):
                 sweden_february_data.append((country, station, values))
     return sweden_february_data
 
-# Get the absolute path to the file
-file_name = 'Task3_flow_20220328.txt'
-file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), file_name))
-
 # Task 1 - Extract ALL values from the file and return a variable containing dates, numerical values, and geographical information.
+file_path = 'Task3 flow_20220328.txt'
 data = extract_data_from_file(file_path)
 
 # Task 2 - Calculate a seven-day moving average for all stations located in Sweden for February.
