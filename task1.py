@@ -23,12 +23,13 @@ window_length = 10
 smoothed_series = movavg(noisy_series, window_length)
 
 # Plot the original time series and the moving average
-plt.figure(figsize=(10, 6))
-plt.plot(range(num_points), noisy_series, label='Noisy Time Series', color='black', alpha=0.7)
-plt.plot(range(window_length - 1, num_points), smoothed_series, label=f'Moving Average (w={window_length})', color='red', linewidth=2)
-plt.xlabel('Time (s)')
-plt.ylabel("Series' Values")
-plt.title('Moving Average on Triangular Time Series with Noise')
-plt.legend()
-plt.grid(True)
-plt.show()
+if __name__ == '__main__':
+  plt.figure(figsize=(10, 6))
+  plt.plot(range(num_points), noisy_series, label='Noisy Time Series', color='black', alpha=0.7)
+  plt.plot(range(window_length - 1, num_points), smoothed_series, label=f'Moving Average (w={window_length})', color='red', linewidth=2)
+  plt.xlabel('Time (s)')
+  plt.ylabel("Series' Values")
+  plt.title('Moving Average on Triangular Time Series with Noise')
+  plt.legend()
+  plt.grid(True)
+  plt.show()
