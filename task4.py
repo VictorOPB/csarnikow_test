@@ -34,13 +34,35 @@ def read_file(file_path):
     table5 = table5[0]
     return table4, table5
 
+def extract_header_from_table(table_lines):
+    if 'X---' not in table_lines[0]:
+        column_delineation = table_lines[1]
+    else:
+        column_delineation = table_lines[0] # line with X's and -'s.
+    split_indices = [i for i, c in enumerate(column_delineation) if c == 'X']
+    col_header_lines = []
+    col_names = []
+    count = 0
+    for table_line in table_lines:
+        if 'X---' in table_line:
+            count += 1
+            continue
+        if count == 1:
+            col_header_lines.append(table_line)
+        elif count == 2:
+            break
+    for start_index, end_index in zip(split_indices, split_indices[1:]): # start_index and end_index contain consecutive elements of split_indices
+        col_name = " ".join(
+                h_line[start_index+1:end_index].strip()  # substring between indices
+                for h_line in col_header_lines           # of all lines in col_header_lines
+            ).strip()
+        col_names.append(col_name)
+    return col_names
+
 # Function to extract data from the table
 def extract_data_from_table(table_lines):
     line_length = 21
-    header = ['Num','Nome da Usina', 'Ssis', 'Pos Vaz', 'Usi Jus Ope', 'Usi Des Ope', 'Usi Jus Ene',
-              'Volume Maximo hm3', 'Volume Minimo hm3', 'Vutil Inic %', 'Previs Oper', 'Pinst MW',
-              'Perdas Hid % - M', 'Qtur Maxima m3/s', 'Qdef Minima m3/s', 'Vert Maximo m3/s',
-              'Produt Eqv MJ/m3', 'Somprd Eqv MJ/m3', 'Produt 65% VU MJ/m3', 'Somprd 65% VU MJ/m3', 'T I P']
+    header = extract_header_from_table(table_lines)
     data = []
     count = 0
     for line in table_lines:
@@ -77,12 +99,12 @@ def main():
             filtered_data.append(row_dict)
 
     # Select the required columns and multiply the columns
-    required_columns = ['Num', 'Nome da Usina', 'Ssis', 'Pinst MW', 'Perdas Hid % - M', 'Produt Eqv MJ/m3']
+    required_columns = ['Num', 'Nome da Usina', 'Ssis', 'Pinst  MW', 'Perdas Hid % - M', 'Produt Eqv MJ/m3']
     new_table = [{col: row[col] for col in required_columns} for row in filtered_data]
 
     # Multiply 'Pinst MW' and 'Produt Eqv MJ/m3' and add the result to a new column 'RESULT'
     for row in new_table:
-        row['RESULT'] = str(round(float(row['Pinst MW']) * float(row['Produt Eqv MJ/m3']),2))
+        row['RESULT'] = str(round(float(row['Pinst  MW']) * float(row['Produt Eqv MJ/m3']),2))
 
     # Display the final table
     for row in new_table:
