@@ -14,15 +14,16 @@ def extract_data_from_file(file_path):
 
   data = []
   for line in lines:
-    values = line.strip().split()
-    country = values[0]
-    station = values[1]
-    dates = values[2:]
+    substrings = line.strip().split()
+    country = substrings[0]
+    station = substrings[1]
+    values = substrings[2:]
       
-    # Reformat the values array to a dictionary with keys numbering from 1 to 60 (60 days) and values as tuples of (date, value).
+    # Reformat the values array to a dictionary with keys numbering from 1 to 60 (60 days) and 
+    # values as tuples of (date, value):
     formatted_data = {}
-    for i, value in enumerate(dates):
-      date = last_date - timedelta(days=len(dates)- i - 1)
+    for i, value in enumerate(values):
+      date = last_date - timedelta(days=len(values)- i - 1)
       formatted_data[i+1] = (date.strftime("%Y/%m/%d"), int(value))
     data.append((country, station, formatted_data))
   return data
@@ -30,8 +31,10 @@ def extract_data_from_file(file_path):
 def filter_sweden_february_data(data):
     sweden_february_data = []
     for country, station, formatted_data in data:
-        if country.lower() == 'sweden':
-          sweden_february_data.append((country, station, formatted_data))
+        listed_values = list(formatted_data.values())
+        february_data = {i+1: data_tuples for i, data_tuples in enumerate(listed_values) if (data_tuples[0][5:7] == '02' and country == 'sweden')}
+        if february_data:
+          sweden_february_data.append((country, station, february_data))
     return sweden_february_data
 
 # Task 1 - Extract ALL values from the file and return a variable containing dates, numerical values, and geographical information.

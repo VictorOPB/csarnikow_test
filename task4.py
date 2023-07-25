@@ -37,9 +37,10 @@ def read_file(file_path):
 # Function to extract data from the table
 def extract_data_from_table(table_lines):
     line_length = 21
-    header = ['Num','Nome da Usina', 'Ssis', 'Pos Vaz', 'Usi Jus Ope', 'Usi Des Ope', 'Usi Jus Ene', 'Volume Maximo hm3', 'Volume Minimo hm3',
-              'Vutil Inic %', 'Previs Oper', 'Pinst MW', 'Perdas Hid % - M', 'Qtur Maxima m3/s', 'Qdef Minima m3/s', 'Vert Maximo m3/s',
-               'Produt Eqv MJ/m3', 'Somprd Eqv MJ/m3', 'Produt 65% VU MJ/m3', 'Somprd 65% VU MJ/m3', 'T I P']
+    header = ['Num','Nome da Usina', 'Ssis', 'Pos Vaz', 'Usi Jus Ope', 'Usi Des Ope', 'Usi Jus Ene',
+              'Volume Maximo hm3', 'Volume Minimo hm3', 'Vutil Inic %', 'Previs Oper', 'Pinst MW',
+              'Perdas Hid % - M', 'Qtur Maxima m3/s', 'Qdef Minima m3/s', 'Vert Maximo m3/s',
+              'Produt Eqv MJ/m3', 'Somprd Eqv MJ/m3', 'Produt 65% VU MJ/m3', 'Somprd 65% VU MJ/m3', 'T I P']
     data = []
     count = 0
     for line in table_lines:
@@ -74,12 +75,10 @@ def main():
     for row_dict in table4+table5:
         if row_dict['Nome da Usina'] in plant_names:
             filtered_data.append(row_dict)
-    print(filtered_data)
 
     # Select the required columns and multiply the columns
     required_columns = ['Num', 'Nome da Usina', 'Ssis', 'Pinst MW', 'Perdas Hid % - M', 'Produt Eqv MJ/m3']
     new_table = [{col: row[col] for col in required_columns} for row in filtered_data]
-    print(new_table)
 
     # Multiply 'Pinst MW' and 'Produt Eqv MJ/m3' and add the result to a new column 'RESULT'
     for row in new_table:
